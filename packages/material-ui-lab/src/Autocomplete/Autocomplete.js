@@ -321,6 +321,7 @@ const Autocomplete = React.forwardRef(function Autocomplete(props, ref) {
     setAnchorEl,
     inputValue,
     groupedOptions,
+    filterConfigOptions,
   } = useAutocomplete({ ...props, componentName: 'Autocomplete' });
 
   let startAdornment;
@@ -387,7 +388,10 @@ const Autocomplete = React.forwardRef(function Autocomplete(props, ref) {
 
   const hasClearIcon = !disableClearable && !disabled;
   const hasPopupIcon = (!freeSolo || forcePopupIcon === true) && forcePopupIcon !== false;
-
+  let hasReachedMinCharSearched = true;
+  if(filterConfigOptions?.startAfter) {
+    hasReachedMinCharSearched = inputValue.length > filterConfigOptions.startAfter ? true : false;
+  }
   return (
     <React.Fragment>
       <div
@@ -470,7 +474,10 @@ const Autocomplete = React.forwardRef(function Autocomplete(props, ref) {
             {loading && groupedOptions.length === 0 ? (
               <div className={classes.loading}>{loadingText}</div>
             ) : null}
-            {groupedOptions.length === 0 && !freeSolo && !loading ? (
+            {groupedOptions.length === 0 && !freeSolo && !loading && !hasReachedMinCharSearched ? (
+              <div className={classes.noOptions}>{minNumCharNotReachedText}</div>
+            ) : null}
+            {groupedOptions.length === 0 && !freeSolo && !loading && hasReachedMinCharSearched ? (
               <div className={classes.noOptions}>{noOptionsText}</div>
             ) : null}
             {groupedOptions.length > 0 ? (

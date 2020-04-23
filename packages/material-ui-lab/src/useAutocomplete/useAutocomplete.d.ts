@@ -10,6 +10,11 @@ export interface CreateFilterOptionsConfig<T> {
   trim?: boolean;
 }
 
+export interface FilterOptionsReturn<T> {
+  options: T[],
+  config: CreateFilterOptionsConfig<T>
+}
+
 export interface FilterOptionsState<T> {
   inputValue: string;
   getOptionLabel: (option: T) => string;
@@ -17,7 +22,7 @@ export interface FilterOptionsState<T> {
 
 export function createFilterOptions<T>(
   config?: CreateFilterOptionsConfig<T>
-): (options: T[], state: FilterOptionsState<T>) => T[];
+): (options: T[], state: FilterOptionsState<T>) => FilterOptionsReturn<T>;
 
 export interface UseAutocompleteCommonProps<T> {
   /**
@@ -304,4 +309,5 @@ export default function useAutocomplete<T>(
   setAnchorEl: () => void;
   focusedTag: number;
   groupedOptions: T[];
+  filterConfigOptions: CreateFilterOptionsConfig<T>
 };

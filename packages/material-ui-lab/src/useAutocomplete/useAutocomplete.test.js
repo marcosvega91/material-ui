@@ -21,7 +21,7 @@ describe('createFilterOptions', () => {
       },
     ];
 
-    expect(filterOptions(options, { inputValue: 'a', getOptionLabel })).to.deep.equal([options[0]]);
+    expect(filterOptions(options, { inputValue: 'a', getOptionLabel }).options).to.deep.equal([options[0]]);
   });
 
   describe('option: startAfter', () => {
@@ -44,9 +44,9 @@ describe('createFilterOptions', () => {
         },
       ];
 
-      expect(filterOptions(options, { inputValue: 'c', getOptionLabel })).to.deep.equal([]);
-      expect(filterOptions(options, { inputValue: 'ca', getOptionLabel })).to.deep.equal([]);
-      expect(filterOptions(options, { inputValue: 'cat', getOptionLabel })).to.deep.equal([
+      expect(filterOptions(options, { inputValue: 'c', getOptionLabel }).options).to.deep.equal([]);
+      expect(filterOptions(options, { inputValue: 'ca', getOptionLabel }).options).to.deep.equal([]);
+      expect(filterOptions(options, { inputValue: 'cat', getOptionLabel }).options).to.deep.equal([
         options[0],
       ]);
     });
@@ -76,7 +76,7 @@ describe('createFilterOptions', () => {
         },
       ];
 
-      expect(filterOptions(options, { inputValue: 'a', getOptionLabel })).to.deep.equal([
+      expect(filterOptions(options, { inputValue: 'a', getOptionLabel }).options).to.deep.equal([
         options[0],
         options[1],
       ]);
@@ -108,13 +108,13 @@ describe('createFilterOptions', () => {
 
     describe('any', () => {
       it('show all results that match', () => {
-        expect(filterOptions(options, { inputValue: 'a', getOptionLabel })).to.deep.equal(options);
+        expect(filterOptions(options, { inputValue: 'a', getOptionLabel }).options).to.deep.equal(options);
       });
     });
 
     describe('start', () => {
       it('show only results that start with search', () => {
-        expect(filterOptions(options, { inputValue: 'a', getOptionLabel })).to.deep.equal(options);
+        expect(filterOptions(options, { inputValue: 'a', getOptionLabel }).options).to.deep.equal(options);
       });
     });
   });
@@ -143,7 +143,7 @@ describe('createFilterOptions', () => {
         },
       ];
 
-      expect(filterOptions(options, { inputValue: 'á', getOptionLabel })).to.deep.equal([
+      expect(filterOptions(options, { inputValue: 'á', getOptionLabel }).options).to.deep.equal([
         options[0],
         options[2],
       ]);
@@ -174,7 +174,7 @@ describe('createFilterOptions', () => {
         },
       ];
 
-      expect(filterOptions(options, { inputValue: 'A', getOptionLabel })).to.deep.equal([
+      expect(filterOptions(options, { inputValue: 'A', getOptionLabel }).options).to.deep.equal([
         options[0],
         options[2],
       ]);

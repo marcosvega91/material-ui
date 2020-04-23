@@ -36,7 +36,10 @@ export function createFilterOptions(config = {}) {
     }
 
     if (startAfter > 0 && input.length <= startAfter) {
-      return [];
+      return {
+        config,
+        options: []
+      };
     }
 
     const filteredOptions = options.filter((option) => {
@@ -50,8 +53,11 @@ export function createFilterOptions(config = {}) {
 
       return matchFrom === 'start' ? candidate.indexOf(input) === 0 : candidate.indexOf(input) > -1;
     });
-
-    return typeof limit === 'number' ? filteredOptions.slice(0, limit) : filteredOptions;
+    const limitedFilteredOptions = typeof limit === 'number' ? filteredOptions.slice(0, limit) : filteredOptions;
+    return {
+      config,
+      options: limitedFilteredOptions
+    };
   };
 }
 
@@ -245,25 +251,29 @@ export default function useAutocomplete(props) {
     !multiple && value != null && inputValue === getOptionLabel(value);
 
   let popupOpen = open;
+  let filteredOptions = [];
+  let filterConfigOptions = null;
+  if(popupOpen){
+    const filterResult = filterOptions(
+      options.filter((option) => {
+        if (
+          filterSelectedOptions &&
+          (multiple ? value : [value]).some(
+            (value2) => value2 !== null && getOptionSelected(option, value2),
+          )
+        ) {
+          return false;
+        }
+        return true;
+      }),
+      // we use the empty string to manipulate `filterOptions` to not filter any options
+      // i.e. the filter predicate always returns true
+      { inputValue: inputValueIsSelectedValue ? '' : inputValue, getOptionLabel },
+    );
+    filterConfigOptions = filterResult.config;
+    filteredOptions = filterResult.options;
+  }
 
-  const filteredOptions = popupOpen
-    ? filterOptions(
-        options.filter((option) => {
-          if (
-            filterSelectedOptions &&
-            (multiple ? value : [value]).some(
-              (value2) => value2 !== null && getOptionSelected(option, value2),
-            )
-          ) {
-            return false;
-          }
-          return true;
-        }),
-        // we use the empty string to manipulate `filterOptions` to not filter any options
-        // i.e. the filter predicate always returns true
-        { inputValue: inputValueIsSelectedValue ? '' : inputValue, getOptionLabel },
-      )
-    : [];
 
   popupOpen = freeSolo && filteredOptions.length === 0 ? false : popupOpen;
 
@@ -994,5 +1004,6 @@ export default function useAutocomplete(props) {
     setAnchorEl,
     focusedTag,
     groupedOptions,
+    filterConfigOptions,
   };
 }

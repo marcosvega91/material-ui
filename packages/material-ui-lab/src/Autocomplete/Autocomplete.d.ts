@@ -125,6 +125,12 @@ export interface AutocompleteProps<T>
    */
   noOptionsText?: React.ReactNode;
   /**
+   * Text to display when startAfter is not reached .
+   *
+   * For localization purposes, you can use the provided [translations](/guides/localization/).
+   */
+  minNumCharNotReachedText?: React.ReactNode;
+  /**
    * Override the default text for the *open popup* icon button.
    *
    * For localization purposes, you can use the provided [translations](/guides/localization/).
